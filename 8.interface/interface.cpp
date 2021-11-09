@@ -4,7 +4,6 @@
 #include <wayland-client.h>
 #include <wayland-version.h>
 
-
 /**
  * announce global object
  *

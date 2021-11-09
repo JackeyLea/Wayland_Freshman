@@ -2,11 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <wayland-client.h>
-#include <wayland-server.h>
-#include <wayland-client-protocol.h>
-#include <wayland-egl.h>
-//#include <wayland-client-core.h>
-//#include <wayland-client-protocol.h>
 
 static struct wl_display *display = NULL;
 static struct wl_compositor *compositor = NULL;
