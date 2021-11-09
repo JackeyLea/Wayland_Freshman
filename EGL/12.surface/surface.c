@@ -34,6 +34,7 @@ static void
 handle_configure(void *data, struct wl_shell_surface *shell_surface,
 		 uint32_t edges, int32_t width, int32_t height)
 {
+    wl_egl_window_resize(egl_window,width,height,0,0);
 }
 
 static void
