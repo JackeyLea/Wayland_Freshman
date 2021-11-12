@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <wayland-client.h>
-#include <wayland-server.h>
-#include <wayland-client-protocol.h>
 
 struct wl_display *display = NULL;
 struct wl_seat *seat = NULL;

@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <wayland-client.h>
-#include <wayland-egl.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <errno.h>
