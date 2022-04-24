@@ -1,7 +1,7 @@
 /////////////////////
 // \author JackeyLea
 // \date 20220423
-// \note 设置自定义鼠标图标为纯色图标
+// \note 设置自定义鼠标图标为图片
 /////////////////////
 
 #include <stdio.h>
@@ -45,12 +45,12 @@ static struct wl_buffer *
 create_pointer_buffer()
 {
 	struct wl_shm_pool *pool;
-	int stride = 40 * 4; // 4 bytes per pixel
-	int size = stride * 40;
+	int stride = 32 * 4; // 4 bytes per pixel
+	int size = stride * 32;
 	int fd;
 	struct wl_buffer *buff;
 
-	fd = os_create_anonymous_file(size);
+	fd = open("./1.rgb", O_RDWR);
 	if (fd < 0)
 	{
 		fprintf(stderr, "creating a buffer file for %d B failed: %m\n",
@@ -68,7 +68,7 @@ create_pointer_buffer()
 
 	pool = wl_shm_create_pool(shm, fd, size);
 	buff = wl_shm_pool_create_buffer(pool, 0,
-									 40 ,40,
+									 32 ,32,
 									 stride,
 									 WL_SHM_FORMAT_XRGB8888);
 	//wl_buffer_add_listener(buffer, &buffer_listener, buffer);
@@ -84,7 +84,7 @@ pointer_handle_enter(void *data, struct wl_pointer *pointer,
     //fprintf(stderr, "Pointer entered surface %p at %f %f\n", surface, wl_fixed_to_double(sx), wl_fixed_to_double(sy));
     wl_surface_attach(pointer_surface,pointer_buffer,0,0);
     wl_surface_commit(pointer_surface);
-    wl_pointer_set_cursor(pointer,serial,pointer_surface,20,20);
+    wl_pointer_set_cursor(pointer,serial,pointer_surface,16,16);
 }
 
 static void
@@ -417,11 +417,6 @@ int main(int argc, char **argv)
 	//wl_shell_suface_add_listener(shell_surface,&shell_surface_listener,NULL);
 	
 	pointer_buffer = create_pointer_buffer();
-	
-	uint32_t *pixel = pointer_shm_data;
-	for(int i=0;i<40*40;i++){
-		*pixel++ = 0x00ff00;//绿色
-	}
 
 	create_window();
 	paint_pixels();
