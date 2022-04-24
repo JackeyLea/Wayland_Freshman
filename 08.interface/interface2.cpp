@@ -1,3 +1,9 @@
+/////////////////////
+// \author JackeyLea
+// \date 
+// \note 注册部分registory
+/////////////////////
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -1,3 +1,9 @@
+/////////////////////
+// \author JackeyLea
+// \date 
+// \note 使用stable接口
+/////////////////////
+
 #include <stdio.h>
 #include <string.h>
 #include <wayland-client.h>

@@ -1,3 +1,9 @@
+/////////////////////
+// \author JackeyLea
+// \date 
+// \note 使用stable shell
+/////////////////////
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

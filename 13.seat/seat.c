@@ -1,3 +1,9 @@
+/////////////////////
+// \author JackeyLea
+// \date 
+// \note 输出wayland支持的硬件接口：鼠标/键盘之类的
+/////////////////////
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

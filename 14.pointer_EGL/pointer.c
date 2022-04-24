@@ -1,3 +1,9 @@
+/////////////////////
+// \author JackeyLea
+// \date 
+// \note 测试鼠标效果
+/////////////////////
+
 #include <stdio.h>
 #include <string.h>
 #include <wayland-client.h>

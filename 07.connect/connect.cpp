@@ -1,3 +1,9 @@
+/////////////////////
+// \author JackeyLea
+// \date 
+// \note 测试能否正常链接wayland server
+/////////////////////
+
 #include <wayland-client.h>
 #include <iostream>
 

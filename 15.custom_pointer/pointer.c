@@ -1,3 +1,9 @@
+/////////////////////
+// \author JackeyLea
+// \date 20220423
+// \note 设置自定义鼠标图标
+/////////////////////
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

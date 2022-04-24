@@ -1,3 +1,9 @@
+/////////////////////
+// \author JackeyLea
+// \date 20220424
+// \note 加载自定义窗口背景图
+/////////////////////
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

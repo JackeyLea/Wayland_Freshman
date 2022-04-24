@@ -1,3 +1,9 @@
+/////////////////////
+// \author JackeyLea
+// \date 
+// \note 测试窗口中捕获键盘操作
+/////////////////////
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

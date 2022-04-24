@@ -1,3 +1,9 @@
+/////////////////////
+// \author JackeyLea
+// \date 
+// \note 以关系内存方式显示一个空白窗口
+/////////////////////
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

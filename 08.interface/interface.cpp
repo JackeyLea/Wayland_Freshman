@@ -1,3 +1,9 @@
+/////////////////////
+// \author JackeyLea
+// \date 
+// \note 输出基本的registory
+/////////////////////
+
 #include <iostream>
 #include <ctime>
 #include <unistd.h>

@@ -1,3 +1,9 @@
+/////////////////////
+// \author JackeyLea
+// \date 
+// \note 以EGL方式显示空白窗口
+/////////////////////
+
 #include <stdio.h>
 #include <string.h>
 #include <wayland-client.h>

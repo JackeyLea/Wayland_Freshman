@@ -1,3 +1,9 @@
+/////////////////////
+// \author JackeyLea
+// \date 
+// \note 测试窗口点击等操作效果
+/////////////////////
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
