@@ -17,4 +17,4 @@ xdg-shell-unstable-v6-protocol.c:
 	$(WAYLAND_SCANNER) private-code $(XDG_SHELL_PROTOCOL) xdg-shell-unstable-v6-protocol.c
 
 clean:
-	rm -rf shell_stable $(HEADERS) $(SOURCES)
+	rm -rf shell_unstable $(HEADERS) $(SOURCES)
