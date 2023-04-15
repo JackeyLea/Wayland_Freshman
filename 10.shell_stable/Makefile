@@ -8,7 +8,8 @@ HEADERS=xdg-shell-client-protocol.h
 SOURCES=xdg-shell-protocol.c
 
 all: $(HEADERS) $(SOURCES)
-	gcc -o shell_stable shell_stable.c $(SOURCES) -I. -lwayland-client -lwayland-egl -lEGL -lGL
+	gcc -o shell_stable shell_stable.c $(SOURCES) -I. -lwayland-client
+	gcc -o shell_stable_egl shell_stable_egl.c $(SOURCES) -I. -lwayland-client -lwayland-egl -lEGL -lGL
 
 xdg-shell-client-protocol.h:
 	$(WAYLAND_SCANNER) client-header $(XDG_SHELL_PROTOCOL) xdg-shell-client-protocol.h
@@ -17,4 +18,4 @@ xdg-shell-protocol.c:
 	$(WAYLAND_SCANNER) private-code $(XDG_SHELL_PROTOCOL) xdg-shell-protocol.c
 
 clean:
-	rm -rf shell_stable $(HEADERS) $(SOURCES)
+	rm -rf shell_stable shell_stable_egl $(HEADERS) $(SOURCES)

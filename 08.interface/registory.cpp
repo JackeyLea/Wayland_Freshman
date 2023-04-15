@@ -1,6 +1,6 @@
 /////////////////////
 // \author JackeyLea
-// \date 
+// \date 2023-03-19
 // \note 输出基本的registory
 /////////////////////
 
@@ -90,13 +90,13 @@ int main(int argc, char **argv)
     std::cerr << "Got registry OK!" << std::endl;
 
     wl_registry_add_listener(reg, &s_registryListener, nullptr);
-    // wl_registry_destroy(reg);
 
     wl_display_dispatch(disp);
 
     std::cerr << "Sleeping for 3 secs..." << std::endl;
     sleep(3);
 
+    wl_registry_destroy(reg);
     wl_display_disconnect(disp);
     
     return 0;

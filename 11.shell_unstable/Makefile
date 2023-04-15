@@ -8,6 +8,7 @@ HEADERS=xdg-shell-unstable-v6-protocol.h
 SOURCES=xdg-shell-unstable-v6-protocol.c
 
 all: $(HEADERS) $(SOURCES)
+	gcc -o shell_unstable shell_unstable.c $(SOURCES) -I. -lwayland-client
 	gcc -o shell_unstable shell_unstable.c $(SOURCES) -I. -lwayland-client -lwayland-egl -lEGL -lGL
 
 xdg-shell-unstable-v6-protocol.h:
@@ -17,4 +18,4 @@ xdg-shell-unstable-v6-protocol.c:
 	$(WAYLAND_SCANNER) private-code $(XDG_SHELL_PROTOCOL) xdg-shell-unstable-v6-protocol.c
 
 clean:
-	rm -rf shell_unstable $(HEADERS) $(SOURCES)
+	rm -rf shell_unstable shell_unstable_egl $(HEADERS) $(SOURCES)

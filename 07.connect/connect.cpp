@@ -1,6 +1,6 @@
 /////////////////////
 // \author JackeyLea
-// \date 
+// \date 2023-03-19
 // \note 测试能否正常链接wayland server
 /////////////////////
 
