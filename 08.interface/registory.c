@@ -4,8 +4,9 @@
 // \note 输出基本的registory
 /////////////////////
 
-#include <iostream>
-#include <ctime>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include <unistd.h>
 #include <wayland-client.h>
 #include <wayland-version.h>
@@ -30,10 +31,7 @@ static void on_global_added(void *data,
 {
     (void)data;
     (void)wl_registry;
-    std::cerr << " Global added: " << interface
-              << ", v" << version
-              << " (name " << name << ")"
-              << std::endl;
+    fprintf(stderr,"Global added: %s, v %d (name %d)\n",interface,version,name);
 }
 
 /**
@@ -57,11 +55,10 @@ static void on_global_removed(void *data,
 {
     (void)data;
     (void)wl_registry;
-    std::cerr << " Global removed: name: " << name
-              << std::endl;
+    fprintf(stderr,"Global removed: name: %d\n",name);
 }
 
-static struct wl_registry_listener s_registryListener
+static struct wl_registry_listener s_registryListener =
 {
     .global = on_global_added,
     .global_remove = on_global_removed
@@ -72,28 +69,28 @@ int main(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    std::cerr << "XDG_RUNTIME_DIR = " << getenv("XDG_RUNTIME_DIR") << std::endl;
+    fprintf(stderr,"XDG_RUNTIME_DIR= %s\n",getenv("XDG_RUNTIME_DIR"));
 
-    struct wl_display *disp = wl_display_connect(nullptr);
+    struct wl_display *disp = wl_display_connect(NULL);
     if (!disp) {
-        std::cerr << "Failed to connect to wayland display!" << std::endl;
+        fprintf(stderr,"Failed to connect to wayland display!\n");
         return 1;
     }
 
-    std::cerr << "Connect OK!" << std::endl;
+    fprintf(stderr,"Connect OK!\n");
 
     struct wl_registry *reg = wl_display_get_registry(disp);
     if (!reg) {
-        std::cerr << "Faild to get registry!" << std::endl;
+        fprintf(stderr,"Failed to get registry!\n");
     }
 
-    std::cerr << "Got registry OK!" << std::endl;
+    fprintf(stderr,"Got registry OK!\n");
 
-    wl_registry_add_listener(reg, &s_registryListener, nullptr);
+    wl_registry_add_listener(reg, &s_registryListener, NULL);
 
     wl_display_dispatch(disp);
 
-    std::cerr << "Sleeping for 3 secs..." << std::endl;
+    fprintf(stderr,"Sleeping for 3 secs...\n");
     sleep(3);
 
     wl_registry_destroy(reg);

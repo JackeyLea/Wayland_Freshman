@@ -1,2 +1,5 @@
 all:
-	g++ -o helloworld helloworld.cpp -lwayland-client -lwayland-server -lwayland-cursor -lwayland-egl
+	gcc -o helloworld helloworld.c -lwayland-client -lwayland-server -lwayland-cursor -lwayland-egl
+
+clean:
+	rm -rf helloworld

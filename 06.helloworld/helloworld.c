@@ -10,9 +10,8 @@
 #include <wayland-cursor.h>
 #include <wayland-util.h>
 
-#include <iostream>
-using namespace std;
+#include <stdio.h>
 
 int main(){
-    cout<<"Hello world"<<endl;
+    printf("Hello world\n");
 }

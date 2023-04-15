@@ -5,15 +5,13 @@
 /////////////////////
 
 #include <wayland-client.h>
-#include <iostream>
-
-using namespace std;
+#include <stdio.h>
 
 int main() {
-    wl_display *display = wl_display_connect(0);
+    struct wl_display *display = wl_display_connect(0);
 
     if (!display) {
-        std::cout << "Unable to connect to wayland compositor" << std::endl;
+        fprintf(stderr,"Unable to connect to wayland compositor\n");
         return -1;
     }
 

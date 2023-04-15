@@ -1,2 +1,5 @@
 all:
-	g++ -o connect connect.cpp -lwayland-client
+	gcc -o connect connect.c -lwayland-client
+	
+clean:
+	rm -rf connect
