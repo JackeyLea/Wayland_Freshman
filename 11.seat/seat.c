@@ -1,15 +1,39 @@
 /////////////////////
 // \author JackeyLea
 // \date 2023-03-19
-// \note 输出基本的registory
+// \note 输出wayland支持的设备
 /////////////////////
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <unistd.h>
+#include <string.h>
 #include <wayland-client.h>
-#include <wayland-version.h>
+
+struct wl_seat *seat = NULL;
+
+static void
+seat_handle_capabilities(void *data, struct wl_seat *seat,
+                         enum wl_seat_capability caps)
+{
+    if (caps & WL_SEAT_CAPABILITY_POINTER)
+    {
+        printf("Display has a pointer\n");
+    }
+
+    if (caps & WL_SEAT_CAPABILITY_KEYBOARD)
+    {
+        printf("Display has a keyboard\n");
+    }
+
+    if (caps & WL_SEAT_CAPABILITY_TOUCH)
+    {
+        printf("Display has a touch screen\n");
+    }
+}
+
+static const struct wl_seat_listener seat_listener = {
+    seat_handle_capabilities,
+};
 
 /**
  * announce global object
@@ -24,14 +48,18 @@
  * @param version interface version
  */
 static void on_global_added(void *data,
-                            struct wl_registry *wl_registry,
+                            struct wl_registry *registry,
                             uint32_t name,
                             const char *interface,
                             uint32_t version)
 {
     (void)data;
-    (void)wl_registry;
-    fprintf(stderr, "Global added: %s, v %d (name %d)\n", interface, version, name);
+    if (strcmp(interface, "wl_seat") == 0)
+    {
+        seat = wl_registry_bind(registry, name,
+                                &wl_seat_interface, 1);
+        wl_seat_add_listener(seat, &seat_listener, NULL);
+    }
 }
 
 /**

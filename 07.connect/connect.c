@@ -1,17 +1,19 @@
 /////////////////////
 // \author JackeyLea
 // \date 2023-03-19
-// \note 测试能否正常链接wayland server
+// \note 连接wayland server
 /////////////////////
 
 #include <wayland-client.h>
 #include <stdio.h>
 
-int main() {
+int main()
+{
     struct wl_display *display = wl_display_connect(0);
 
-    if (!display) {
-        fprintf(stderr,"Unable to connect to wayland compositor\n");
+    if (!display)
+    {
+        fprintf(stderr, "Unable to connect to wayland compositor\n");
         return -1;
     }
 
