@@ -1,10 +1,9 @@
 # Wayland_Freshman
 
-食铁兽Wayland开发入门系列附属代码
+<a href="https://feater.top/wayland/wayland-learning-indexes" target="_blank">食铁兽Wayland开发入门系列</a>附属代码
 
-入门系列教程索引：https://feater.top/wayland/wayland-learning-indexes
-
-0-5为文字介绍没有代码
+- 本仓库只有代码，文字等介绍见教程各文章
+- 平台为Ubuntu22.04.03 LTS及对应Server版，尽量使用软件仓库中的软件以保持环境统一。
 
 ## 更新日志
 
