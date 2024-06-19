@@ -3,9 +3,13 @@
 <a href="https://feater.top/wayland/wayland-learning-indexes" target="_blank">食铁兽Wayland开发入门系列</a>附属代码
 
 - 本仓库只有代码，文字等介绍见教程各文章
-- 平台为Ubuntu22.04.03 LTS及对应Server版，尽量使用软件仓库中的软件以保持环境统一。
+- 平台为Ubuntu24.04 LTS及对应Server版，尽量使用软件仓库中的软件以保持环境统一。
 
 ## 更新日志
+
+### 2024.06.19(v2.2)
+
+- 代码适配Ubuntu 24.04 LTS
 
 ### 2023.11.30(v2.1)
 
