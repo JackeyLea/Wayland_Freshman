@@ -9,7 +9,6 @@ SOURCES=xdg-shell-protocol.c
 
 all: $(HEADERS) $(SOURCES)
 	gcc -o point point.c $(SOURCES) -I. -lwayland-client
-	gcc -o point_egl point_egl.c $(SOURCES) -I. -lwayland-client -lwayland-egl -lEGL -lGL
 
 $(HEADERS):
 	$(WAYLAND_SCANNER) client-header $(XDG_SHELL_PROTOCOL) $@

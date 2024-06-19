@@ -55,7 +55,7 @@ static void output_frame(struct wl_listener *listener, void *data) {
 		scene, output->wlr_output);
 
 	/* Render the scene if needed and commit the output */
-	wlr_scene_output_commit(scene_output);
+	wlr_scene_output_commit(scene_output,NULL);
 
 	struct timespec now;
 	clock_gettime(CLOCK_MONOTONIC, &now);
@@ -73,28 +73,33 @@ static void server_new_output(struct wl_listener *listener, void *data) {
 	 * and our renderer. Must be done once, before commiting the output */
 	wlr_output_init_render(wlr_output, server->allocator, server->renderer);
 
+	/* The output may be disabled, switch it on. */
+	struct wlr_output_state state;
+	wlr_output_state_init(&state);
+	wlr_output_state_set_enabled(&state, true);
+
 	/* Some backends don't have modes. DRM+KMS does, and we need to set a mode
 	 * before we can use the output. The mode is a tuple of (width, height,
 	 * refresh rate), and each monitor supports only a specific set of modes. We
 	 * just pick the monitor's preferred mode, a more sophisticated compositor
 	 * would let the user configure it. */
-	if (!wl_list_empty(&wlr_output->modes)) {
-		struct wlr_output_mode *mode = wlr_output_preferred_mode(wlr_output);
-		wlr_output_set_mode(wlr_output, mode);
-		wlr_output_enable(wlr_output, true);
-		if (!wlr_output_commit(wlr_output)) {
-			return;
-		}
+	struct wlr_output_mode *mode = wlr_output_preferred_mode(wlr_output);
+	if (mode != NULL) {
+		wlr_output_state_set_mode(&state, mode);
 	}
 
+	/* Atomically applies the new output state. */
+	wlr_output_commit_state(wlr_output, &state);
+	wlr_output_state_finish(&state);
+
 	/* Allocates and configures our state for this output */
-	struct tinywl_output *output =
-		calloc(1, sizeof(struct tinywl_output));
+	struct tinywl_output *output = calloc(1, sizeof(*output));
 	output->wlr_output = wlr_output;
 	output->server = server;
 	/* Sets up a listener for the frame notify event. */
 	output->frame.notify = output_frame;
 	wl_signal_add(&wlr_output->events.frame, &output->frame);
+
 	wl_list_insert(&server->outputs, &output->link);
 
 	/* Adds this to the output layout. The add_auto function arranges outputs
@@ -106,14 +111,16 @@ static void server_new_output(struct wl_listener *listener, void *data) {
 	 * display, which Wayland clients can see to find out information about the
 	 * output (such as DPI, scale factor, manufacturer, etc).
 	 */
-	wlr_output_layout_add_auto(server->output_layout, wlr_output);
+	struct wlr_output_layout_output *l_output = wlr_output_layout_add_auto(server->output_layout,
+		wlr_output);
+	struct wlr_scene_output *scene_output = wlr_scene_output_create(server->scene, wlr_output);
 }
 
 int main(int argc, char *argv[]) {
 	wlr_log_init(WLR_DEBUG, NULL);
 	char *startup_cmd = NULL;
 
-	struct tinywl_server server;
+	struct tinywl_server server = {0};
 	/* The Wayland display is managed by libwayland. It handles accepting
 	 * clients from the Unix socket, manging Wayland globals, and so on. */
 	server.wl_display = wl_display_create();
@@ -121,13 +128,22 @@ int main(int argc, char *argv[]) {
 	 * output hardware. The autocreate option will choose the most suitable
 	 * backend based on the current environment, such as opening an X11 window
 	 * if an X11 server is running. */
-	server.backend = wlr_backend_autocreate(server.wl_display);
+	server.backend = wlr_backend_autocreate(server.wl_display,NULL);
+	if (server.backend == NULL) {
+		wlr_log(WLR_ERROR, "failed to create wlr_backend");
+		return 1;
+	}
 
 	/* Autocreates a renderer, either Pixman, GLES2 or Vulkan for us. The user
 	 * can also specify a renderer using the WLR_RENDERER env var.
 	 * The renderer is responsible for defining the various pixel formats it
 	 * supports for shared memory, this configures that for clients. */
 	server.renderer = wlr_renderer_autocreate(server.backend);
+	if (server.renderer == NULL) {
+		wlr_log(WLR_ERROR, "failed to create wlr_renderer");
+		return 1;
+	}
+
 	wlr_renderer_init_wl_display(server.renderer, server.wl_display);
 
 	/* Autocreates an allocator for us.
@@ -136,6 +152,10 @@ int main(int argc, char *argv[]) {
 	 * screen */
 	 server.allocator = wlr_allocator_autocreate(server.backend,
 		server.renderer);
+	if (server.allocator == NULL) {
+		wlr_log(WLR_ERROR, "failed to create wlr_allocator");
+		return 1;
+	}
 
 	/* This creates some hands-off wlroots interfaces. The compositor is
 	 * necessary for clients to allocate surfaces and the data device manager
@@ -143,7 +163,8 @@ int main(int argc, char *argv[]) {
 	 * to dig your fingers in and play with their behavior if you want. Note that
 	 * the clients cannot set the selection directly without compositor approval,
 	 * see the handling of the request_set_selection event below.*/
-	wlr_compositor_create(server.wl_display, server.renderer);
+	wlr_compositor_create(server.wl_display,5,server.renderer);
+	//wlr_subcompositor_create(server.wl_display);
 	wlr_data_device_manager_create(server.wl_display);
 
 	/* Creates an output layout, which a wlroots utility for working with an
@@ -163,7 +184,6 @@ int main(int argc, char *argv[]) {
 	 * necessary.
 	 */
 	server.scene = wlr_scene_create();
-	wlr_scene_attach_output_layout(server.scene, server.output_layout);
 
 	/* Add a Unix socket to the Wayland display. */
 	const char *socket = wl_display_add_socket_auto(server.wl_display);
