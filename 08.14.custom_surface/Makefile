@@ -6,9 +6,13 @@ XDG_SHELL_PROTOCOL = $(WAYLAND_PROTOCOLS_DIR)/stable/xdg-shell/xdg-shell.xml
 
 HEADERS=xdg-shell-client-protocol.h
 SOURCES=xdg-shell-protocol.c
+IMAGE=test.rgb
 
-all: $(HEADERS) $(SOURCES)
+all: $(IMAGE) $(HEADERS) $(SOURCES)
 	gcc -o custom_surface custom_surface.c $(SOURCES) -I. -lwayland-client
+
+$(IMAGE):
+	ffmpeg -i /usr/share/backgrounds/Clouds_by_Tibor_Mokanszki.jpg -vf scale=1920:1080 $(CURDIR)/test.rgb
 
 $(HEADERS):
 	$(WAYLAND_SCANNER) client-header $(XDG_SHELL_PROTOCOL) $@
@@ -17,4 +21,4 @@ $(SOURCES):
 	$(WAYLAND_SCANNER) private-code $(XDG_SHELL_PROTOCOL) $@
 
 clean:
-	rm -rf custom_surface $(HEADERS) $(SOURCES)
+	rm -rf custom_surface $(HEADERS) $(SOURCES) test.rgb

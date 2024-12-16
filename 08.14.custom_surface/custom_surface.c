@@ -29,8 +29,8 @@ struct wl_pointer *pointer;
 
 void *shm_data;
 
-int WIDTH = 480;
-int HEIGHT = 360;
+int WIDTH = 1920;
+int HEIGHT = 1080;
 
 static void
 handle_ping(void *data, struct xdg_wm_base *xdg_shell,
@@ -110,112 +110,6 @@ static const struct wl_seat_listener seat_listener = {
 	seat_handle_capabilities,
 };
 
-static int
-set_cloexec_or_close(int fd)
-{
-	long flags;
-
-	if (fd == -1)
-		return -1;
-
-	flags = fcntl(fd, F_GETFD);
-	if (flags == -1)
-		goto err;
-
-	if (fcntl(fd, F_SETFD, flags | FD_CLOEXEC) == -1)
-		goto err;
-
-	return fd;
-
-err:
-	close(fd);
-	return -1;
-}
-
-static int
-create_tmpfile_cloexec(char *tmpname)
-{
-	int fd;
-
-#ifdef HAVE_MKOSTEMP
-	fd = mkostemp(tmpname, O_CLOEXEC);
-	if (fd >= 0)
-		unlink(tmpname);
-#else
-	fd = mkstemp(tmpname);
-	if (fd >= 0)
-	{
-		fd = set_cloexec_or_close(fd);
-		unlink(tmpname);
-	}
-#endif
-	return fd;
-}
-
-/*
- * Create a new, unique, anonymous file of the given size, and
- * return the file descriptor for it. The file descriptor is set
- * CLOEXEC. The file is immediately suitable for mmap()'ing
- * the given size at offset zero.
- *
- * The file should not have a permanent backing store like a disk,
- * but may have if XDG_RUNTIME_DIR is not properly implemented in OS.
- *
- * The file name is deleted from the file system.
- *
- * The file is suitable for buffer sharing between processes by
- * transmitting the file descriptor over Unix sockets using the
- * SCM_RIGHTS methods.
-
- * 创建一个给定大小的新的、唯一的、匿名的文件，
- * 并为其返回文件描述符。文件描述符被设置为cloexec。
- * 该文件立即适合于mmap()的给定大小的偏移量为零。
- *
- * 该文件不应该像磁盘那样有永久备份存储，
- * 但如果XDG_RUNTIME_DIR在操作系统中没有正确实现，可能有。
- *
- * 该文件名将从文件系统中删除。
- *
- * 该文件适用于通过使用SCM_RIGHTS方法通过Unix套接字传输文件描述符来实现进程之间的缓冲区共享。
- */
-int os_create_anonymous_file(off_t size)
-{
-	static const char template[] = "/weston-shared-XXXXXX";
-	const char *path;
-	char *name;
-	int fd;
-
-	path = getenv("XDG_RUNTIME_DIR");
-	if (!path)
-	{
-		errno = ENOENT;
-		return -1;
-	}
-
-	name = malloc(strlen(path) + sizeof(template));
-	if (!name)
-		return -1;
-
-	strcpy(name, path);
-	strcat(name, template);
-	printf("%s\n", name);
-
-	fd = create_tmpfile_cloexec(name);
-
-	free(name);
-
-	if (fd < 0)
-		return -1;
-
-	if (ftruncate(fd, size) < 0)
-	{
-		close(fd);
-		return -1;
-	}
-
-	return fd; // 其中：fd是临时文件，大小为size，用于mmap用。
-}
-
 static struct wl_buffer *
 create_buffer()
 {
@@ -225,7 +119,7 @@ create_buffer()
 	int fd;
 	struct wl_buffer *buff;
 
-	fd = open("./3.rgb", O_RDWR);
+	fd = open("./test.rgb", O_RDWR);
 	if (fd < 0)
 	{
 		fprintf(stderr, "creating a buffer file for %d B failed: %m\n",
