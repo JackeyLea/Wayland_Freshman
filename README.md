@@ -28,7 +28,6 @@
     - <a href="https://blog.jackeylea.com/wayland/wayland-seat-keyboard-input/" target="_blank">Wayland入门教程04.15：键盘输入</a>
 - <a href="https://blog.jackeylea.com/wayland/advance-of-wayland-development/" target="_blank">Wayland入门教程05：进阶</a>
     - <a href="https://blog.jackeylea.com/wayland/simple-wayland-server-and-client/" target="_blank">Wayland入门教程05.01：服务端</a>
-    - <a href="https://blog.jackeylea.com/wayland/simple-desktop-based-on-wlroots/" target="_blank">Wayland入门教程05.02：简单桌面（基于wlroots）</a>
 
 ## 更新日志
 
